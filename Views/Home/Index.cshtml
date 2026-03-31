@@ -1,160 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>bdahnaf (Ahnaf Shahriar) / Portfolio</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <style>
-        body {
-            background-color: #0d1117;
-            color: #c9d1d9;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-        }
-
-        /* Navbar */
-        .gh-nav {
-            background-color: #161b22;
-            border-bottom: 1px solid #30363d;
-            padding: 12px 24px;
-        }
-
-        /* Sidebar Profile */
-        .profile-pic {
-            width: 100%;
-            aspect-ratio: 1/1;
-            border-radius: 50%;
-            border: 1px solid #30363d;
-            background: #161b22;
-            overflow: hidden;
-        }
-
-        .profile-pic i {
-            font-size: 9rem;
-            color: #30363d;
-        }
-
-        /* README Container */
-        .readme-container {
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            padding: 32px;
-            background: transparent;
-            margin-bottom: 24px;
-        }
-
-        .readme-header {
-            border-bottom: 1px solid #30363d;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            color: #8b949e;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-        }
-
-        /* Typography */
-        .readme-content h1,
-        .readme-content h2,
-        .readme-content h3 {
-            color: #e6edf3;
-            border-bottom: 1px solid #21262d;
-            padding-bottom: 8px;
-            margin-top: 24px;
-            margin-bottom: 16px;
-        }
-
-        .readme-content p,
-        .readme-content li {
-            line-height: 1.6;
-            font-size: 15px;
-        }
-
-        .text-blue {
-            color: #58a6ff;
-        }
-
-        /* Project Repository Cards */
-        .repo-card {
-            background: transparent;
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            padding: 16px;
-            height: 100%;
-            transition: 0.2s;
-        }
-
-        .repo-card:hover {
-            border-color: #8b949e;
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .repo-link {
-            color: #58a6ff;
-            font-weight: 600;
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        .repo-link:hover {
-            text-decoration: underline;
-        }
-
-        .lang-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 4px;
-        }
-
-        /* Sidebar Badges */
-        .cert-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            font-size: 13px;
-            margin-bottom: 12px;
-            opacity: 0.85;
-        }
-
-        .cert-icon {
-            color: #f2cc60;
-            font-size: 1.1rem;
-        }
-
-        /* Tabs */
-        .gh-tabs {
-            border-bottom: 1px solid #30363d;
-            margin-bottom: 24px;
-        }
-
-        .gh-tab {
-            padding: 8px 16px;
-            border-bottom: 2px solid transparent;
-            color: #c9d1d9;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 14px;
-        }
-
-        .gh-tab.active {
-            border-bottom-color: #f78166;
-            font-weight: 600;
-        }
-
-        .gh-tab i {
-            margin-right: 8px;
-            opacity: 0.6;
-        }
-    </style>
-</head>
-
-<body>
-
-    <nav class="gh-nav d-flex align-items-center justify-content-between">
+﻿    <nav class="gh-nav d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center">
             <i class="bi bi-terminal fs-4 me-2" style="color: #58a6ff;"></i>
             <span class="fw-bold text-white">ahnaf-shahriar</span>
@@ -176,7 +20,7 @@
                 <a href="mailto:bdahnaf@gmail.com" class="text-decoration-none">
                     <i class="bi bi-envelope-at" title="Copy Email"></i>
                 </a>
-                <a href="files/Ahnaf-Shahriar-CV.pdf" target="_blank" class="text-decoration-none">
+                <a href="~/files/Ahnaf-Shahriar-CV.pdf" target="_blank" class="text-decoration-none">
                     <i class="bi bi-file-earmark-pdf" title="View CV"></i>
                 </a>
             </div>
@@ -187,7 +31,7 @@
         <div class="row g-lg-5">
             <aside class="col-lg-3">
                 <div class="profile-pic mb-3 d-flex align-items-center justify-content-center">
-                    <img src="img/profile_picture.jpg" alt="Ahnaf Shahriar" class="w-100 h-100"
+                    <img src="~/img/profile_picture.jpg" alt="Ahnaf Shahriar" class="w-100 h-100"
                         style="object-fit: cover;">
                 </div>
 
@@ -217,7 +61,7 @@
                     style="border-color: #30363d !important; background: rgba(255,255,255,0.02);">
                     <a href="https://wa.me/8801737783615" target="_blank" class="d-block text-decoration-none"
                         title="Click to chat on WhatsApp">
-                        <img src="img/whatsapp-qr.png" alt="WhatsApp QR Code" class="img-fluid rounded bg-white p-2"
+                        <img src="~/img/whatsapp-qr.png" alt="WhatsApp QR Code" class="img-fluid rounded bg-white p-2"
                             style="max-width: 130px; transition: transform 0.2s;"
                             onmouseover="this.style.transform='scale(1.05)'"
                             onmouseout="this.style.transform='scale(1)'">
@@ -508,7 +352,7 @@
                             <div class="col-md-6 col-xl-4">
                                 <div class="p-3 border rounded d-flex align-items-center h-100"
                                     style="border-color: #30363d !important; background: rgba(255,255,255,0.02);">
-                                    <img src="img/microsoft-certified-azure-fundamentals.png" alt="Azure" width="60"
+                                    <img src="~/img/microsoft-certified-azure-fundamentals.png" alt="Azure" width="60"
                                         height="60" class="me-3" style="object-fit: contain;">
                                     <div>
                                         <h6 class="mb-1 text-white" style="font-size: 13px;">Azure Fundamentals (AZ-900)
@@ -520,7 +364,7 @@
                             <div class="col-md-6 col-xl-4">
                                 <div class="p-3 border rounded d-flex align-items-center h-100"
                                     style="border-color: #30363d !important; background: rgba(255,255,255,0.02);">
-                                    <img src="img/Oracle-Gen-AI-Professional.png" alt="Oracle" width="60" height="60"
+                                    <img src="~/img/Oracle-Gen-AI-Professional.png" alt="Oracle" width="60" height="60"
                                         class="me-3" style="object-fit: contain;">
                                     <div>
                                         <h6 class="mb-1 text-white" style="font-size: 13px;">Generative AI Professional
@@ -532,7 +376,7 @@
                             <div class="col-md-6 col-xl-4">
                                 <div class="p-3 border rounded d-flex align-items-center h-100"
                                     style="border-color: #30363d !important; background: rgba(255,255,255,0.02);">
-                                    <img src="img/Oracle-Vector-AI-Professional.png" alt="Oracle" width="60" height="60"
+                                    <img src="~/img/Oracle-Vector-AI-Professional.png" alt="Oracle" width="60" height="60"
                                         class="me-3" style="object-fit: contain;">
                                     <div>
                                         <h6 class="mb-1 text-white" style="font-size: 13px;">AI Vector Search
@@ -544,7 +388,7 @@
                             <div class="col-md-6 col-xl-4">
                                 <div class="p-3 border rounded d-flex align-items-center h-100"
                                     style="border-color: #30363d !important; background: rgba(255,255,255,0.02);">
-                                    <img src="img/Oracle-Cloud-Infra-Ai-Assoc.png" alt="Oracle" width="60" height="60"
+                                    <img src="~/img/Oracle-Cloud-Infra-Ai-Assoc.png" alt="Oracle" width="60" height="60"
                                         class="me-3" style="object-fit: contain;">
                                     <div>
                                         <h6 class="mb-1 text-white" style="font-size: 13px;">Cloud Infra. Foundations
@@ -556,7 +400,7 @@
                             <div class="col-md-6 col-xl-4">
                                 <div class="p-3 border rounded d-flex align-items-center h-100"
                                     style="border-color: #30363d !important; background: rgba(255,255,255,0.02);">
-                                    <img src="img/Oracle-Cloud-Infra-Ai-Assoc.png" alt="Oracle" width="60" height="60"
+                                    <img src="~/img/Oracle-Cloud-Infra-Ai-Assoc.png" alt="Oracle" width="60" height="60"
                                         class="me-3" style="object-fit: contain;">
                                     <div>
                                         <h6 class="mb-1 text-white" style="font-size: 13px;">Cloud Infra. AI Assoc.
@@ -591,7 +435,7 @@
                             <div class="col-md-6 col-xl-4">
                                 <div class="p-3 border rounded d-flex align-items-center h-100"
                                     style="border-color: #30363d !important; background: rgba(255,255,255,0.02);">
-                                    <img src="img/DevSkill.jpeg" alt="DotNet" width="36" height="36" class="me-3"
+                                    <img src="~/img/DevSkill.jpeg" alt="DotNet" width="36" height="36" class="me-3"
                                         style="object-fit: contain;">
                                     <div>
                                         <h6 class="mb-1 text-white" style="font-size: 13px;">Professional Programming
@@ -747,9 +591,3 @@
             </div>
         </footer>
     </div>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
