@@ -25,12 +25,7 @@ jobs:
     - name: Publish Application
       run: dotnet publish -c Release -r win-x64 --self-contained true -o ./publish_output
 
-    # 4. Create app_offline.htm (Crucial for .NET IIS Deployments)
-    # This prevents "File in Use" errors by temporarily taking the app offline during the upload
-    - name: Prepare Offline File
-      run: echo "<html><body><h1>Deploying new version, please wait...</h1></body></html>" > ./publish_output/app_offline.htm
-
-    # 5. Upload to Plesk via FTP
+    # 4. Upload to Plesk via FTP
     - name: FTP Deploy
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
@@ -38,5 +33,5 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./publish_output/
-        # Leave server-dir empty if your FTP user's home directory is already set to /httpdocs
+        # FTP user's home directory is already set to /httpdocs
         server-dir: /
