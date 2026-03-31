@@ -1,6 +1,5 @@
 name: Deploy Portfolio to Plesk
 
-# Trigger the workflow on push to the main branch
 on:
   push:
     branches:
@@ -11,27 +10,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Grab the code from the repository
     - name: Checkout Code
       uses: actions/checkout@v4
 
-    # 2. Install the .NET 10 SDK on the GitHub runner
     - name: Setup .NET 10
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '10.0.x'
 
-    # 3. Build and Publish the app (Self-Contained)
     - name: Publish Application
       run: dotnet publish -c Release -r win-x64 --self-contained true -o ./publish_output
 
-    # 4. Upload to Plesk via FTP
-    - name: FTP Deploy
+    # 1. Create the offline file
+    - name: Create app_offline.htm
+      run: echo "<html><body><h1>Deploying new version, please wait...</h1></body></html>" > app_offline.htm
+
+    # 2. Upload the offline file directly via curl
+    - name: Take App Offline
+      run: curl -T app_offline.htm ftp://${{ secrets.FTP_SERVER }}/ --user "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}"
+
+    # 3. Give IIS 5 seconds to spin down and release the locked .dll files
+    - name: Wait for IIS to release file locks
+      run: sleep 5
+
+    # 4. Deploy the new code
+    - name: FTP Deploy Application Files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./publish_output/
-        # FTP user's home directory is already set to /httpdocs
-        server-dir: /
+        server-dir: / 
+
+    # 5. Delete the offline file via curl to bring the app back online instantly
+    - name: Bring App Online (Delete app_offline.htm)
+      run: curl ftp://${{ secrets.FTP_SERVER }}/ -u "${{ secrets.FTP_USERNAME }}:${{ secrets.FTP_PASSWORD }}" -Q "DELE app_offline.htm"
