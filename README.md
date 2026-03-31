@@ -2,7 +2,7 @@
 
 > A dynamic, GitHub-styled personal portfolio built with ASP.NET Core 10 MVC and Bootstrap 5.
 
-![Portfolio Preview](wwwroot/img/profile_picture.jpg) ## 🚀 Overview
+## 🚀 Overview
 This repository contains the source code for my professional portfolio. Designed with a clean, developer-focused aesthetic inspired by GitHub's UI, it showcases my journey as a Full-Stack Software Developer, Solution Architect, and Technical Leader.
 
 **Live Demo:** [Insert your live URL here once hosted]
@@ -28,5 +28,5 @@ This repository contains the source code for my professional portfolio. Designed
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/bdahnaf/portfolio.git](https://github.com/bdahnaf/portfolio.git)
+   git clone https://github.com/bdahnaf/portfolio.git
    cd portfolio
