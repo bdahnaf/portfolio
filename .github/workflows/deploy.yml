@@ -1,0 +1,42 @@
+name: Deploy Portfolio to Plesk
+
+# Trigger the workflow on push to the main branch
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Grab the code from the repository
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # 2. Install the .NET 10 SDK on the GitHub runner
+    - name: Setup .NET 10
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    # 3. Build and Publish the app (Self-Contained)
+    - name: Publish Application
+      run: dotnet publish -c Release -r win-x64 --self-contained true -o ./publish_output
+
+    # 4. Create app_offline.htm (Crucial for .NET IIS Deployments)
+    # This prevents "File in Use" errors by temporarily taking the app offline during the upload
+    - name: Prepare Offline File
+      run: echo "<html><body><h1>Deploying new version, please wait...</h1></body></html>" > ./publish_output/app_offline.htm
+
+    # 5. Upload to Plesk via FTP
+    - name: FTP Deploy
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./publish_output/
+        # Leave server-dir empty if your FTP user's home directory is already set to /httpdocs
+        server-dir: /
