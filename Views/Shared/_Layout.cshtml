@@ -166,6 +166,65 @@
             margin-right: 8px;
             opacity: 0.6;
         }
+
+        /* --- Theme Transitions --- */
+        body, .gh-nav, .repo-card, .readme-container, .border {
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* --- Light Mode Overrides --- */
+        body.light-mode {
+            background-color: #ffffff;
+            color: #24292f;
+        }
+        body.light-mode .gh-nav {
+            background-color: #f6f8fa;
+            border-bottom: 1px solid #d0d7de;
+        }
+        body.light-mode .text-white { color: #24292f !important; }
+        body.light-mode .text-secondary { color: #57606a !important; }
+        
+        body.light-mode .readme-container, 
+        body.light-mode .profile-pic,
+        body.light-mode .repo-card {
+            border-color: #d0d7de !important;
+            background-color: #ffffff !important;
+        }
+        
+        body.light-mode .readme-header {
+            border-bottom-color: #d0d7de;
+            color: #57606a;
+        }
+        
+        body.light-mode .profile-pic { background: #f6f8fa !important; }
+        
+        body.light-mode .readme-content h1,
+        body.light-mode .readme-content h2,
+        body.light-mode .readme-content h3 {
+            color: #24292f;
+            border-bottom-color: #d0d7de;
+        }
+        
+        body.light-mode .repo-card:hover {
+            border-color: #0969da !important;
+            background: rgba(9, 105, 218, 0.05) !important;
+        }
+        
+        body.light-mode .gh-tab { color: #24292f; }
+        
+        body.light-mode .btn {
+            background-color: #f6f8fa !important;
+            border-color: #d0d7de !important;
+            color: #24292f !important;
+        }
+        
+        body.light-mode .border { border-color: #d0d7de !important; }
+        body.light-mode footer { border-top-color: #d0d7de !important; color: #57606a !important; }
+        
+        /* Fix for the certification boxes inline styles */
+        body.light-mode [style*="rgba(255,255,255,0.02)"] {
+            background: rgba(0, 0, 0, 0.02) !important;
+        }
     </style>
 </head>
 
@@ -173,6 +232,39 @@
     @RenderBody()
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const themeToggle = document.getElementById("themeToggle");
+            const body = document.body;
+            
+            // 1. Check if the user previously chose light mode
+            const currentTheme = localStorage.getItem("portfolio_theme");
+            
+            // 2. Apply it immediately on load
+            if (currentTheme === "light") {
+                body.classList.add("light-mode");
+                themeToggle.classList.replace("bi-moon-stars-fill", "bi-sun-fill");
+                themeToggle.classList.add("text-warning"); // Makes the sun yellow
+            }
+
+            // 3. Listen for clicks on the toggle button
+            themeToggle.addEventListener("click", function () {
+                body.classList.toggle("light-mode");
+                
+                if (body.classList.contains("light-mode")) {
+                    // Switch to Light Mode
+                    localStorage.setItem("portfolio_theme", "light");
+                    themeToggle.classList.replace("bi-moon-stars-fill", "bi-sun-fill");
+                    themeToggle.classList.add("text-warning");
+                } else {
+                    // Switch to Dark Mode
+                    localStorage.setItem("portfolio_theme", "dark");
+                    themeToggle.classList.replace("bi-sun-fill", "bi-moon-stars-fill");
+                    themeToggle.classList.remove("text-warning");
+                }
+            });
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 
