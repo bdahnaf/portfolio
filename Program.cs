@@ -2,7 +2,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+// Register WakaTimeService for dependency injection
+builder.Services.AddHttpClient<Portfolio.Services.WakaTimeService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
