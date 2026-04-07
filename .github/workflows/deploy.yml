@@ -21,6 +21,12 @@ jobs:
     - name: Publish Application
       run: dotnet publish -c Release -r win-x64 --self-contained true -o ./publish_output
 
+    # --- WAKATIME API Key Injection STEP ---
+    - name: Inject WakaTime Secret
+      run: |
+        sed -i 's/INJECT_WAKATIME_KEY_HERE/${{ secrets.WAKATIME_API_KEY }}/g' ./publish_output/appsettings.json
+    # --------------------------
+
     # 1. Create the offline file
     - name: Create app_offline.htm
       run: echo "<html><body><h1>Deploying new version, please wait...</h1></body></html>" > app_offline.htm
