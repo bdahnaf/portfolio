@@ -131,6 +131,15 @@
                     <span class="badge rounded-pill fw-normal"
                         style="background-color: rgba(56, 139, 253, 0.15); color: #58a6ff; border: 1px solid transparent;">GenAI</span>
                 </div>
+
+                <hr class="border-secondary opacity-25">
+
+                <h6 class="fw-bold small mb-3 mt-4">Code Written (Last 7 Days)</h6>
+                <div id="codingStatsContainer">
+                    <div class="text-secondary small">
+                        <i class="spinner-border spinner-border-sm me-2" role="status"></i> Loading live stats...
+                    </div>
+                </div>
             </aside>
 
             <main class="col-lg-9">
@@ -615,3 +624,46 @@
             </div>
         </footer>
     </div>
+
+    @section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch('/api/coding-stats')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById("codingStatsContainer");
+                    container.innerHTML = ""; // Clear the loader
+
+                    if (!data || data.length === 0) {
+                        container.innerHTML = "<span class='small text-secondary'>Stats unavailable.</span>";
+                        return;
+                    }
+
+                    data.forEach(lang => {
+                        // Assign colors based on language
+                        let color = "#8b949e";
+                        if (lang.name === "C#") color = "#178600";
+                        if (lang.name === "PHP") color = "#4F5D95";
+                        if (lang.name === "JavaScript") color = "#f1e05a";
+                        if (lang.name === "HTML") color = "#e34c26";
+
+                        const html = `
+                            <div class="mb-2">
+                                <div class="d-flex justify-content-between small mb-1">
+                                    <span class="fw-bold text-secondary">${lang.name}</span>
+                                    <span class="text-secondary" style="font-size: 0.8em;">${lang.text}</span>
+                                </div>
+                                <div class="progress" style="height: 6px; background-color: rgba(255,255,255,0.05);">
+                                    <div class="progress-bar" role="progressbar" style="width: ${lang.percent}%; background-color: ${color};" aria-valuenow="${lang.percent}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        `;
+                        container.insertAdjacentHTML('beforeend', html);
+                    });
+                })
+                .catch(error => {
+                    document.getElementById("codingStatsContainer").innerHTML = "<span class='small text-danger'>Failed to load stats.</span>";
+                });
+        });
+    </script>
+}
