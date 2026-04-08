@@ -33,7 +33,12 @@ public class SpotifyService
         });
 
         var response = await _httpClient.SendAsync(request);
-        response.EnsureSuccessStatusCode();
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorBody = await response.Content.ReadAsStringAsync();
+            throw new Exception($"Spotify Auth Failed [{response.StatusCode}]: {errorBody}");
+        }
 
         var content = await response.Content.ReadAsStringAsync();
         var json = JsonNode.Parse(content);
@@ -42,36 +47,50 @@ public class SpotifyService
 
     public async Task<object?> GetCurrentlyPlayingAsync()
     {
-        var accessToken = await GetAccessTokenAsync();
-
-        var request = new HttpRequestMessage(HttpMethod.Get, "https://api.spotify.com/v1/me/player/currently-playing");
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-
-        var response = await _httpClient.SendAsync(request);
-
-        // 204 No Content means nothing is playing right now
-        if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+        try
         {
-            return new { isPlaying = false };
+            var accessToken = await GetAccessTokenAsync();
+
+            var request = new HttpRequestMessage(HttpMethod.Get, "https://api.spotify.com/v1/me/player/currently-playing");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            var response = await _httpClient.SendAsync(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+            {
+                return new { isPlaying = false };
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorBody = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Spotify Data Failed [{response.StatusCode}]: {errorBody}");
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+            var json = JsonNode.Parse(content);
+
+            if (json?["is_playing"]?.GetValue<bool>() != true || json["item"]?["type"]?.ToString() != "track")
+            {
+                return new { isPlaying = false };
+            }
+
+            return new
+            {
+                isPlaying = true,
+                title = json["item"]?["name"]?.ToString(),
+                artist = json["item"]?["artists"]?[0]?["name"]?.ToString(),
+                albumArt = json["item"]?["album"]?["images"]?[0]?["url"]?.ToString(),
+                spotifyUrl = json["item"]?["external_urls"]?["spotify"]?.ToString()
+            };
         }
-
-        var content = await response.Content.ReadAsStringAsync();
-        var json = JsonNode.Parse(content);
-
-        // Check if a track is actually playing (and not just paused/a podcast)
-        if (json?["is_playing"]?.GetValue<bool>() != true || json["item"]?["type"]?.ToString() != "track")
+        catch (Exception ex)
         {
-            return new { isPlaying = false };
+            return new { 
+                isPlaying = false, 
+                hasError = true, 
+                errorMessage = ex.Message 
+            };
         }
-
-        // Map the complex Spotify JSON to a clean anonymous object for our frontend
-        return new
-        {
-            isPlaying = true,
-            title = json["item"]?["name"]?.ToString(),
-            artist = json["item"]?["artists"]?[0]?["name"]?.ToString(),
-            albumArt = json["item"]?["album"]?["images"]?[0]?["url"]?.ToString(),
-            spotifyUrl = json["item"]?["external_urls"]?["spotify"]?.ToString()
-        };
     }
 }
