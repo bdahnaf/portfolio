@@ -140,6 +140,28 @@
                         <i class="spinner-border spinner-border-sm me-2" role="status"></i> Loading live stats...
                     </div>
                 </div>
+
+                <hr class="border-secondary opacity-25">
+                <div id="spotifyWidget" class="d-none border rounded p-2 mt-4 mb-3" style="background-color: rgba(30, 215, 96, 0.05); border-color: rgba(30, 215, 96, 0.3) !important;">
+                    <div class="d-flex align-items-center">
+                        <img id="spotifyAlbumArt" src="" alt="Album" class="rounded shadow-sm" style="width: 42px; height: 42px; object-fit: cover;">
+                        
+                        <div class="ms-2 overflow-hidden w-100">
+                            <div class="d-flex align-items-center mb-1">
+                                <i class="bi bi-spotify text-success me-1" style="font-size: 0.75rem;"></i>
+                                <span class="text-success fw-bold text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.5px;">Now Playing</span>
+                            </div>
+                            <a id="spotifyLink" href="#" target="_blank" class="text-decoration-none text-white text-truncate d-block fw-bold lh-1 mb-1" style="font-size: 0.85rem;"></a>
+                            <p id="spotifyArtist" class="mb-0 text-secondary text-truncate lh-1" style="font-size: 0.75rem;"></p>
+                        </div>
+                        
+                        <div class="ms-auto d-flex align-items-end" style="height: 15px; gap: 2px;">
+                            <div class="bg-success rounded-top" style="width: 3px; height: 100%; animation: bounce 1.2s infinite ease-in-out;"></div>
+                            <div class="bg-success rounded-top" style="width: 3px; height: 60%; animation: bounce 1.2s infinite ease-in-out 0.2s;"></div>
+                            <div class="bg-success rounded-top" style="width: 3px; height: 80%; animation: bounce 1.2s infinite ease-in-out 0.4s;"></div>
+                        </div>
+                    </div>
+                </div>
             </aside>
 
             <main class="col-lg-9">
@@ -663,7 +685,23 @@
                 })
                 .catch(error => {
                     document.getElementById("codingStatsContainer").innerHTML = "<span class='small text-danger'>Failed to load stats.</span>";
-                });
+            });
+            // Fetch Spotify Status
+            fetch('/api/spotify/now-playing')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.isPlaying) {
+                        // Unhide the widget
+                        document.getElementById("spotifyWidget").classList.remove("d-none");
+                        
+                        // Inject the data
+                        document.getElementById("spotifyAlbumArt").src = data.albumArt;
+                        document.getElementById("spotifyLink").innerText = data.title;
+                        document.getElementById("spotifyLink").href = data.spotifyUrl;
+                        document.getElementById("spotifyArtist").innerText = data.artist;
+                    }
+                })
+                .catch(err => console.error("Spotify API error", err));
         });
     </script>
 }

@@ -45,4 +45,11 @@ public class HomeController : Controller
 
         return Json(stats);
     }
+
+    [HttpGet("api/spotify/now-playing")]
+    public async Task<IActionResult> GetNowPlaying([FromServices] SpotifyService spotifyService)
+    {
+        var track = await spotifyService.GetCurrentlyPlayingAsync();
+        return Json(track);
+    }
 }

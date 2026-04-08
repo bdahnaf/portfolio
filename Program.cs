@@ -4,6 +4,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 // Register WakaTimeService for dependency injection
 builder.Services.AddHttpClient<Portfolio.Services.WakaTimeService>();
+// Register SpotifyService for dependency injection
+builder.Services.AddHttpClient<Portfolio.Services.SpotifyService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
