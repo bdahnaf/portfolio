@@ -24,17 +24,17 @@ jobs:
     # --- WAKATIME API Key Injection STEP ---
     - name: Inject WakaTime Secret
       run: |
-        sed -i 's/INJECT_WAKATIME_KEY_HERE/${{ secrets.WAKATIME_API_KEY }}/g' ./publish_output/appsettings.json
+        sed -i 's|INJECT_WAKATIME_KEY_HERE|${{ secrets.WAKATIME_API_KEY }}|g' ./publish_output/appsettings.json
     # --------------------------
 
     # --- Spotify Injection STEP ---
     - name: Inject Spotify Secret
       run: |
-        sed -i 's/INJECT_SPOTIFY_CLIENT_ID_HERE/${{ secrets.SPOTIFY_CLIENT_ID }}/g' ./publish_output/appsettings.json
-        sed -i 's/INJECT_SPOTIFY_CLIENT_SECRET_HERE/${{ secrets.SPOTIFY_CLIENT_SECRET }}/g' ./publish_output/appsettings.json
-        sed -i 's/INJECT_SPOTIFY_REFRESH_TOKEN_HERE/${{ secrets.SPOTIFY_REFRESH_TOKEN }}/g' ./publish_output/appsettings.json
+        sed -i 's|INJECT_SPOTIFY_CLIENT_ID_HERE|${{ secrets.SPOTIFY_CLIENT_ID }}|g' ./publish_output/appsettings.json
+        sed -i 's|INJECT_SPOTIFY_CLIENT_SECRET_HERE|${{ secrets.SPOTIFY_CLIENT_SECRET }}|g' ./publish_output/appsettings.json
+        sed -i 's|INJECT_SPOTIFY_REFRESH_TOKEN_HERE|${{ secrets.SPOTIFY_REFRESH_TOKEN }}|g' ./publish_output/appsettings.json
     # --------------------------
-      
+
     # 1. Create the offline file
     - name: Create app_offline.htm
       run: echo "<html><body><h1>Deploying new version, please wait...</h1></body></html>" > app_offline.htm
