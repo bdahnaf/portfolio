@@ -35,6 +35,13 @@ jobs:
         sed -i 's|INJECT_SPOTIFY_REFRESH_TOKEN|${{ secrets.SPOTIFY_REFRESH_TOKEN }}|g' ./publish_output/appsettings.json
     # --------------------------
 
+    # --- Steam Injection STEP ---
+    - name: Inject Steam Secret
+      run: |
+        sed -i 's|INJECT_STEAM_API_KEY|${{ secrets.STEAM_API_KEY }}|g' ./publish_output/appsettings.json
+        sed -i 's|INJECT_STEAM_ID|${{ secrets.STEAM_ID }}|g' ./publish_output/appsettings.json
+    # --------------------------
+
     # 1. Create the offline file
     - name: Create app_offline.htm
       run: echo "<html><body><h1>Deploying new version, please wait...</h1></body></html>" > app_offline.htm
