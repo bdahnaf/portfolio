@@ -162,6 +162,26 @@
                         </div>
                     </div>
                 </div>
+
+                <hr class="border-secondary opacity-25">
+                <div id="steamWidget" class="d-none border rounded p-3 mt-4 mb-3" style="background-color: #171a21; border-color: rgba(102, 192, 244, 0.3) !important;">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-steam me-2 fs-5" style="color: #66c0f4;"></i>
+                        <span class="text-uppercase fw-bold" style="font-size: 0.75rem; color: #66c0f4; letter-spacing: 0.5px;">Most Played on Steam</span>
+                    </div>
+                    
+                    <div id="steamGamesContainer" class="d-flex flex-column gap-2 mb-3">
+                        </div>
+
+                    <div class="d-flex gap-2">
+                        <a id="steamProfileBtn" href="#" target="_blank" class="btn btn-sm w-100 fw-bold d-flex align-items-center justify-content-center" style="background-color: #2a475e; color: #c7d5e0; border: none; font-size: 0.8rem;">
+                            <i class="bi bi-person-fill me-2"></i> View Profile
+                        </a>
+                        <a id="steamAddBtn" href="#" class="btn btn-sm fw-bold d-flex align-items-center justify-content-center px-3" style="background-color: #66c0f4; color: #171a21; border: none; font-size: 0.9rem;" title="Add on Steam">
+                            <i class="bi bi-person-plus-fill"></i>
+                        </a>
+                    </div>
+                </div>
             </aside>
 
             <main class="col-lg-9">
@@ -702,6 +722,42 @@
                     }
                 })
                 .catch(err => console.error("Spotify API error", err));
+
+            // Fetch Steam Status (Top 2 Games & Profile)
+            fetch('/api/steam/top-games')
+                .then(response => {
+                    if (!response.ok) throw new Error(`Server returned status: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.hasError || !data.success) {
+                        console.error("🚨 BACKEND STEAM ERROR:", data.errorMessage);
+                        return;
+                    }
+
+                    // Unhide the widget and set button links
+                    document.getElementById("steamWidget").classList.remove("d-none");
+                    document.getElementById("steamProfileBtn").href = data.profileUrl;
+                    document.getElementById("steamAddBtn").href = data.addFriendUrl;
+
+                    const container = document.getElementById("steamGamesContainer");
+                    container.innerHTML = ""; // Clear out any old content
+
+                    // Loop through the games and generate the HTML
+                    data.games.forEach(game => {
+                        const gameHtml = `
+                            <a href="${game.storeUrl}" target="_blank" class="d-flex align-items-center text-decoration-none rounded p-1" style="background-color: rgba(255,255,255,0.05); transition: background-color 0.2s;">
+                                <img src="${game.bannerUrl}" alt="${game.title}" class="rounded" style="width: 80px; height: 38px; object-fit: cover;">
+                                <div class="ms-2 overflow-hidden">
+                                    <p class="mb-0 text-white text-truncate fw-bold lh-1" style="font-size: 0.8rem;">${game.title}</p>
+                                    <p class="mb-0 mt-1 text-truncate" style="font-size: 0.7rem; color: #8f98a0;">${game.hoursPlayed} hrs on record</p>
+                                </div>
+                            </a>
+                        `;
+                        container.insertAdjacentHTML('beforeend', gameHtml);
+                    });
+                })
+                .catch(err => console.error("🚨 FRONTEND STEAM FETCH ERROR:", err));
         });
     </script>
 }

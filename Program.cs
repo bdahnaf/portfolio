@@ -6,6 +6,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient<Portfolio.Services.WakaTimeService>();
 // Register SpotifyService for dependency injection
 builder.Services.AddHttpClient<Portfolio.Services.SpotifyService>();
+// Register SteamService for dependency injection
+builder.Services.AddHttpClient<Portfolio.Services.SteamService>();
 
 var app = builder.Build();
 

@@ -52,4 +52,11 @@ public class HomeController : Controller
         var track = await spotifyService.GetCurrentlyPlayingAsync();
         return Json(track);
     }
+
+    [HttpGet("api/steam/top-games")]
+    public async Task<IActionResult> GetSteamStats([FromServices] SteamService steamService)
+    {
+        var stats = await steamService.GetTopGamesAsync();
+        return Json(stats);
+    }
 }
