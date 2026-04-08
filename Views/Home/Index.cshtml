@@ -142,7 +142,8 @@
                 </div>
 
                 <hr class="border-secondary opacity-25">
-                <div id="spotifyWidget" class="d-none border rounded p-2 mt-4 mb-3" style="background-color: rgba(30, 215, 96, 0.05); border-color: rgba(30, 215, 96, 0.3) !important;">
+                @* Spotify currenty Playing *@
+@*                 <div id="spotifyWidget" class="d-none border rounded p-2 mt-4 mb-3" style="background-color: rgba(30, 215, 96, 0.05); border-color: rgba(30, 215, 96, 0.3) !important;">
                     <div class="d-flex align-items-center">
                         <img id="spotifyAlbumArt" src="" alt="Album" class="rounded shadow-sm" style="width: 42px; height: 42px; object-fit: cover;">
                         
@@ -161,7 +162,35 @@
                             <div class="bg-success rounded-top" style="width: 3px; height: 80%; animation: bounce 1.2s infinite ease-in-out 0.4s;"></div>
                         </div>
                     </div>
+                </div> *@
+                <div id="spotifyWidget" class="d-none border rounded p-3 mt-4 mb-3" style="background-color: rgba(30, 215, 96, 0.05); border-color: rgba(30, 215, 96, 0.3) !important;">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="bi bi-spotify text-success me-2 fs-5"></i>
+                    <span class="text-uppercase fw-bold text-success" style="font-size: 0.75rem; letter-spacing: 0.5px;">Spotify Vibes</span>
                 </div>
+
+                <div id="spotifyNowPlayingContainer" class="d-none mb-3 pb-3 border-bottom" style="border-color: rgba(30, 215, 96, 0.2) !important;">
+                    <p class="text-success fw-bold mb-2" style="font-size: 0.65rem; letter-spacing: 0.5px;"><i class="bi bi-speaker me-1"></i> NOW PLAYING</p>
+                    <div class="d-flex align-items-center">
+                        <img id="spotifyNpArt" src="" alt="Album" class="rounded shadow-sm" style="width: 42px; height: 42px; object-fit: cover;">
+                        <div class="ms-2 overflow-hidden w-100">
+                            <a id="spotifyNpTitle" href="#" target="_blank" class="text-decoration-none text-white text-truncate d-block fw-bold lh-1 mb-1" style="font-size: 0.85rem;"></a>
+                            <p id="spotifyNpArtist" class="mb-0 text-secondary text-truncate lh-1" style="font-size: 0.75rem;"></p>
+                        </div>
+                        <div class="ms-auto d-flex align-items-end" style="height: 15px; gap: 2px;">
+                            <div class="bg-success rounded-top" style="width: 3px; height: 100%; animation: bounce 1.2s infinite ease-in-out;"></div>
+                            <div class="bg-success rounded-top" style="width: 3px; height: 60%; animation: bounce 1.2s infinite ease-in-out 0.2s;"></div>
+                            <div class="bg-success rounded-top" style="width: 3px; height: 80%; animation: bounce 1.2s infinite ease-in-out 0.4s;"></div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div id="spotifyTopTracksContainer">
+                    <p class="text-secondary fw-bold mb-2" style="font-size: 0.65rem; letter-spacing: 0.5px;"><i class="bi bi-fire me-1"></i> HEAVY ROTATION THIS MONTH</p>
+                    <div id="spotifyTopTracksList" class="d-flex flex-column gap-2">
+                        </div>
+                </div>
+            </div>
 
                 <hr class="border-secondary opacity-25">
                 <div id="steamWidget" class="d-none border rounded p-3 mt-4 mb-3" style="background-color: #171a21; border-color: rgba(102, 192, 244, 0.3) !important;">
@@ -707,22 +736,66 @@
                     document.getElementById("codingStatsContainer").innerHTML = "<span class='small text-danger'>Failed to load stats.</span>";
             });
             // Fetch Spotify Status
-            fetch('/api/spotify/now-playing')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.isPlaying) {
-                        // Unhide the widget
-                        document.getElementById("spotifyWidget").classList.remove("d-none");
+            // Only Currently Playing
+            // fetch('/api/spotify/now-playing')
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         if (data.isPlaying) {
+            //             // Unhide the widget
+            //             document.getElementById("spotifyWidget").classList.remove("d-none");
                         
-                        // Inject the data
-                        document.getElementById("spotifyAlbumArt").src = data.albumArt;
-                        document.getElementById("spotifyLink").innerText = data.title;
-                        document.getElementById("spotifyLink").href = data.spotifyUrl;
-                        document.getElementById("spotifyArtist").innerText = data.artist;
-                    }
-                })
-                .catch(err => console.error("Spotify API error", err));
+            //             // Inject the data
+            //             document.getElementById("spotifyAlbumArt").src = data.albumArt;
+            //             document.getElementById("spotifyLink").innerText = data.title;
+            //             document.getElementById("spotifyLink").href = data.spotifyUrl;
+            //             document.getElementById("spotifyArtist").innerText = data.artist;
+            //         }
+            //     })
+            //     .catch(err => console.error("Spotify API error", err));
 
+            // Fetch Spotify Dashboard
+            fetch('/api/spotify/dashboard')
+            .then(response => {
+                if (!response.ok) throw new Error(`Server returned status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                if (data.hasError || !data.success) {
+                    console.error("🚨 BACKEND SPOTIFY ERROR:", data.errorMessage);
+                    return;
+                }
+
+                // Unhide the main widget container (because Top Tracks are always there)
+                document.getElementById("spotifyWidget").classList.remove("d-none");
+
+                // Handle Now Playing
+                if (data.nowPlaying && data.nowPlaying.isPlaying) {
+                    document.getElementById("spotifyNowPlayingContainer").classList.remove("d-none");
+                    document.getElementById("spotifyNpArt").src = data.nowPlaying.albumArt;
+                    document.getElementById("spotifyNpTitle").innerText = data.nowPlaying.title;
+                    document.getElementById("spotifyNpTitle").href = data.nowPlaying.spotifyUrl;
+                    document.getElementById("spotifyNpArtist").innerText = data.nowPlaying.artist;
+                }
+
+                // Handle Top Tracks
+                const ttList = document.getElementById("spotifyTopTracksList");
+                ttList.innerHTML = ""; 
+                
+                data.topTracks.forEach((track, index) => {
+                    const trackHtml = `
+                        <a href="${track.spotifyUrl}" target="_blank" class="d-flex align-items-center text-decoration-none rounded p-1" style="background-color: rgba(255,255,255,0.02); transition: background-color 0.2s;">
+                            <span class="text-secondary fw-bold me-2 ms-1" style="font-size: 0.7rem;">${index + 1}</span>
+                            <img src="${track.albumArt}" alt="${track.title}" class="rounded" style="width: 32px; height: 32px; object-fit: cover;">
+                            <div class="ms-2 overflow-hidden">
+                                <p class="mb-0 text-white text-truncate fw-bold lh-1" style="font-size: 0.8rem;">${track.title}</p>
+                                <p class="mb-0 mt-1 text-secondary text-truncate lh-1" style="font-size: 0.7rem;">${track.artist}</p>
+                            </div>
+                        </a>
+                    `;
+                    ttList.insertAdjacentHTML('beforeend', trackHtml);
+                });
+            })
+            .catch(err => console.error("🚨 FRONTEND SPOTIFY FETCH ERROR:", err));
             // Fetch Steam Status (Top 2 Games & Profile)
             fetch('/api/steam/top-games')
                 .then(response => {

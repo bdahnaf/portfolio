@@ -53,6 +53,13 @@ public class HomeController : Controller
         return Json(track);
     }
 
+    [HttpGet("api/spotify/dashboard")]
+    public async Task<IActionResult> GetSpotifyDashboard([FromServices] SpotifyService spotifyService)
+    {
+        var dashboard = await spotifyService.GetSpotifyDashboardAsync();
+        return Json(dashboard);
+    }
+
     [HttpGet("api/steam/top-games")]
     public async Task<IActionResult> GetSteamStats([FromServices] SteamService steamService)
     {
